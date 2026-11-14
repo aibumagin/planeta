@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#05060f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Пустая планета</title>
+<meta name="description" content="Самая пустая игра в мире. Каждый день в ней появляется одна новая вещь – её выбирает самый залайканный комментарий.">
+<!-- значок: Пустая планета в фирменной красной шапочке «AI» канала «AI да Бумагин!» -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css?v=fullscreen">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body data-mode="intro">
+<canvas id="c"></canvas>
+
+<div id="ui">
+  <div id="top">
+    <div id="daybox">
+      <div id="daynum">ДЕНЬ 0</div>
+      <div id="daytitle">Пустая планета</div>
+      <div id="passport"></div>
+      <button id="b-replay" type="button" hidden title="Сегодняшнее событие начнётся с самого начала">↻ День заново</button>
+    </div>
+    <div id="btns">
+      <button id="b-orbit" type="button">Орбита</button>
+      <button id="b-log" type="button">Летопись</button>
+      <button id="b-fullscreen" type="button" hidden>На весь экран</button>
+      <button id="b-sound" type="button">Звук: вкл</button>
+      <button id="b-save" type="button" hidden>Сохранить итог дня</button>
+      <a id="b-follow" class="follow" href="https://t.me/aibumagin" target="_blank" rel="noopener" title="Канал автора в Telegram">В Telegram</a>
+    </div>
+  </div>
+
+  <div id="tip" hidden></div>
+  <div id="dlg" hidden role="dialog" aria-labelledby="dlg-name">
+    <div id="dlg-name"></div>
+    <p id="dlg-text"></p>
+    <div id="dlg-opts">
+      <button type="button">Да, загляну</button>
+      <button type="button">Нет, гуляю дальше</button>
+    </div>
+  </div>
+
+  <div id="npc-dlg" hidden role="dialog" aria-labelledby="npc-name">
+    <div id="npc-name"></div>
+    <p id="npc-text" aria-live="polite"></p>
+    <div id="npc-opts"></div>
+  </div>
+
+  <div id="bottom">
+    <div id="npc-actions">
+      <button id="npc-talk" type="button" hidden>Поговорить</button>
+      <button id="npc-climb" type="button" hidden></button>
+    </div>
+    <div id="feed"></div>
+    <div id="coach" hidden></div>
+    <div id="hint"></div>
+  </div>
+
+  <div id="joy"><div id="knob"></div></div>
+  <button id="jump" type="button">Прыжок</button>
+
+  <aside id="log" hidden>
+    <div id="log-head"><b>Летопись планеты</b><button id="log-close" type="button">Закрыть</button></div>
+    <ol id="log-list"></ol>
+  </aside>
+
+  <div id="intro">
+    <div id="intro-card">
+      <div class="kicker" id="intro-day">День 0</div>
+      <h1>Пустая планета</h1>
+      <p id="intro-copy">Самая пустая игра в мире. Каждый день здесь появляется одна новая вещь – та, которую выбрал самый залайканный комментарий.</p>
+      <div id="intro-actions">
+        <button id="play" type="button">Высадиться</button>
+        <a id="intro-follow" href="https://t.me/aibumagin" target="_blank" rel="noopener">Следить за планетой в Telegram</a>
+      </div>
+      <p id="ios-install-tip" hidden>На iPhone открой игру в Safari, выбери «Поделиться» → «На экран “Домой”» и запусти её с иконки.</p>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="src/main.js?v=fullscreen"></script>
+</body>
+</html>

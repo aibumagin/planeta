@@ -1,0 +1,7 @@
+# остаётся только на этом компьютере
+src/days/demo.js
+canon-demo.json
+README.md
+.claude/
+._*
+.DS_Store

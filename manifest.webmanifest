@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Пустая планета",
+  "short_name": "Планета",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#05060f",
+  "theme_color": "#05060f",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

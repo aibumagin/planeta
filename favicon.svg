@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Пустая планета в фирменной красной шапочке «AI» канала «AI да Бумагин!» -->
+  <defs>
+    <radialGradient id="bg" cx="0.85" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#ff6a2c" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ff6a2c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="planet" cx="0.38" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#ece7f7"/>
+      <stop offset=".6" stop-color="#b6acd8"/>
+      <stop offset="1" stop-color="#7d71b0"/>
+    </radialGradient>
+    <linearGradient id="hat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff4a3d"/>
+      <stop offset="1" stop-color="#d4231c"/>
+    </linearGradient>
+    <clipPath id="ball"><circle cx="32" cy="38" r="21"/></clipPath>
+  </defs>
+
+  <rect width="64" height="64" rx="15" fill="#0e0f13"/>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+
+  <!-- звёзды -->
+  <g fill="#fff">
+    <circle cx="8" cy="10" r="1.1" opacity=".8"/>
+    <circle cx="56" cy="9" r=".9" opacity=".6"/>
+    <circle cx="57" cy="22" r=".7" opacity=".5"/>
+  </g>
+
+  <!-- атмосфера, как в игре -->
+  <circle cx="32" cy="38" r="23.5" fill="#3d63ff" opacity=".45"/>
+  <circle cx="32" cy="38" r="21" fill="url(#planet)"/>
+  <!-- низкополигональные пятна и кратеры -->
+  <g clip-path="url(#ball)" fill="#6f63a6" opacity=".55">
+    <path d="M11 41 L23 37 L19 50 Z"/>
+    <path d="M19 50 L27 46 L25 58 Z" opacity=".7"/>
+    <path d="M36 47 L49 42 L44 55 Z"/>
+    <path d="M41 32 L52 35 L45 40 Z" opacity=".6"/>
+  </g>
+
+  <!-- шапочка: купол, отворот, нашивка AI -->
+  <path d="M15 25 C15 11 22 4 32 4 C42 4 49 11 49 25 Z" fill="url(#hat)"/>
+  <g stroke="#b51b15" stroke-width="1.1" opacity=".55" fill="none">
+    <path d="M24 8 C21.5 13 20.5 19 20.5 25"/>
+    <path d="M32 5 L32 25"/>
+    <path d="M40 8 C42.5 13 43.5 19 43.5 25"/>
+  </g>
+  <rect x="12.5" y="21.5" width="39" height="10" rx="4" fill="#e8302a"/>
+  <rect x="12.5" y="28.5" width="39" height="3" rx="1.5" fill="#000" opacity=".16"/>
+  <rect x="26" y="22.6" width="12" height="7.8" rx="1.2" fill="#fff"/>
+  <text x="32" y="29.1" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="7" fill="#111">AI</text>
+</svg>

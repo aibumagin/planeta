@@ -1,0 +1,239 @@
+:root {
+  --ink: #fff;
+  --glass: rgba(16, 18, 44, .58);
+  --line: rgba(255, 255, 255, .16);
+  --accent: #ffb04a;
+  --tg: #2aabee;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden; background: #05060f; color: var(--ink);
+  font-family: "SF Pro Rounded", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  user-select: none; -webkit-user-select: none; touch-action: none;
+}
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+#ui { position: fixed; inset: 0; pointer-events: none; }
+#ui button, #ui input, #ui a, #joy, #log, #intro { pointer-events: auto; }
+body.clean #ui { display: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+/* верхняя полоса */
+#top {
+  position: absolute; left: 0; right: 0; top: 0;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding: calc(14px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  transition: opacity .5s;
+}
+#daybox { flex: none; }
+#daynum {
+  white-space: nowrap; font-size: clamp(30px, 6vw, 56px); font-weight: 900; letter-spacing: .02em; line-height: 1;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, .55);
+}
+#daytitle { margin-top: 6px; font-size: clamp(13px, 2.2vw, 17px); font-weight: 600; opacity: .82; text-shadow: 0 1px 10px rgba(0, 0, 0, .6); }
+#btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+#btns button, #log-close {
+  background: var(--glass); border: 1px solid var(--line); border-radius: 999px;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+#btns button, #log-close { padding: 9px 14px; font-size: 14px; font-weight: 600; }
+#btns button:active, #log-close:active { background: rgba(255, 255, 255, .2); }
+/* переход в Telegram-канал автора */
+#btns a.follow {
+  padding: 9px 14px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none;
+  color: #fff; background: var(--tg); border: 1px solid var(--tg);
+}
+#btns a.follow:active { transform: scale(.97); }
+#btns a.follow.nudge { animation: nudge 1.2s ease-in-out 4; }
+@keyframes nudge { 50% { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(42, 171, 238, .3); } }
+
+/* подсказка рядом с объектом */
+#tip {
+  position: absolute; left: 50%; top: calc(132px + env(safe-area-inset-top)); transform: translateX(-50%);
+  width: max-content; max-width: min(92vw, 460px); padding: 12px 18px; border-radius: 18px; text-align: center;
+  background: var(--glass); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+#tip b { display: block; font-size: 16px; color: var(--accent); }
+#tip span { display: block; margin-top: 4px; font-size: 14px; line-height: 1.35; opacity: .9; }
+
+#passport {
+  display: inline-block; white-space: nowrap; margin-top: 9px; padding: 5px 11px; border-radius: 999px;
+  font-size: 12px; font-weight: 800; letter-spacing: .03em; color: var(--accent);
+  background: var(--glass); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+
+/* «День заново»: рядом с паспортом, в том же стиле */
+#b-replay {
+  margin: 9px 0 0 6px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .03em;
+  color: var(--ink); background: var(--glass); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+#b-replay:active { transform: scale(.96); }
+
+/* лента событий: слева внизу, чтобы не закрывать героя */
+#feed {
+  align-self: flex-start;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; max-width: min(72vw, 360px);
+}
+#feed .line {
+  padding: 7px 13px; border-radius: 14px; font-size: 13px; font-weight: 600; line-height: 1.3;
+  background: var(--glass); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  animation: feed-in .25s ease-out; transition: opacity .6s;
+}
+#feed .line.find { color: var(--accent); background: rgba(40, 26, 6, .82); border-color: rgba(255, 176, 74, .7); }
+#feed .line.out { opacity: 0; }
+@keyframes feed-in { from { opacity: 0; transform: translateY(8px); } }
+#feed:empty { display: none; }
+body[data-mode="intro"] #feed { display: none; }
+
+/* низ: действия и подсказка по управлению */
+#bottom {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 0 calc(16px + env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+/* разговор с табличкой – окно как в RPG: имя на ленточке, реплика печатается по буквам, выбор ответа */
+:is(#dlg, #npc-dlg) {
+  position: absolute; left: 50%; bottom: calc(46px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  width: min(92vw, 560px); padding: 22px 22px 16px; border-radius: 20px; pointer-events: auto;
+  background: rgba(12, 14, 36, .86); border: 2px solid var(--tg);
+  box-shadow: 0 0 0 5px rgba(42, 171, 238, .18), 0 18px 50px rgba(0, 0, 0, .55);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  animation: dlg-in .35s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+@keyframes dlg-in { from { opacity: 0; transform: translate(-50%, 14px) scale(.96); } }
+:is(#dlg-name, #npc-name) {
+  position: absolute; top: -15px; left: 18px; padding: 5px 14px; border-radius: 999px;
+  background: var(--tg); color: #fff; font-size: 13px; font-weight: 800; letter-spacing: .02em;
+}
+:is(#dlg-text, #npc-text) { margin: 0 0 14px; min-height: 4.2em; font-size: 16px; line-height: 1.4; }
+#dlg-text::after { content: '▾'; margin-left: 6px; color: var(--tg); opacity: 0; }
+#dlg.ready #dlg-text::after { opacity: 1; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+#dlg-opts { display: flex; flex-direction: column; gap: 6px; opacity: .35; transition: opacity .3s; }
+#dlg.ready #dlg-opts { opacity: 1; }
+:is(#dlg-opts, #npc-opts) button {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px; border-radius: 12px;
+  border: 1px solid transparent; background: rgba(255, 255, 255, .06); text-align: left; font-size: 15px; font-weight: 700;
+}
+#dlg-opts button::before { content: '▸'; color: var(--tg); opacity: 0; transition: opacity .15s, transform .15s; transform: translateX(-4px); }
+#dlg-opts button.sel { background: rgba(42, 171, 238, .2); border-color: rgba(42, 171, 238, .55); }
+#dlg-opts button.sel::before { opacity: 1; transform: none; }
+body.talking #joy, body.talking #jump, body.talking #hint, body.talking #coach, body.talking #tip, body.talking #feed { display: none !important; }
+body[data-mode="orbit"] #dlg, body[data-mode="intro"] #dlg { display: none; }
+
+/* подсказка новичку: как осмотреться. Уходит, когда гость сам повернул камеру */
+#coach {
+  padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 600; text-align: center;
+  background: var(--glass); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  animation: coach-in .5s ease-out both; transition: opacity .6s;
+}
+#coach b { color: var(--accent); }
+#coach.off { opacity: 0; }
+@keyframes coach-in { from { opacity: 0; transform: translateY(8px); } }
+body[data-mode="orbit"] #coach { display: none; }
+#hint { font-size: 12px; opacity: .7; text-align: center; text-shadow: 0 1px 8px rgba(0, 0, 0, .7); }
+.touch #hint { display: none; }
+.touch #bottom { padding-bottom: calc(168px + env(safe-area-inset-bottom)); }
+
+/* сенсорное управление */
+#joy, #jump { display: none; position: absolute; }
+.touch #joy, .touch #jump { display: block; }
+#joy {
+  left: calc(22px + env(safe-area-inset-left)); bottom: calc(26px + env(safe-area-inset-bottom));
+  width: 128px; height: 128px; border-radius: 50%;
+  background: rgba(255, 255, 255, .07); border: 1px solid var(--line); touch-action: none;
+}
+#knob {
+  position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px;
+  border-radius: 50%; background: rgba(255, 255, 255, .3);
+}
+#jump {
+  right: calc(26px + env(safe-area-inset-right)); bottom: calc(40px + env(safe-area-inset-bottom));
+  width: 96px; height: 96px; border-radius: 50%; font-size: 14px; font-weight: 700;
+  background: rgba(255, 176, 74, .22); border: 1px solid rgba(255, 176, 74, .55); touch-action: none;
+}
+#jump:active { background: rgba(255, 176, 74, .45); }
+
+/* летопись */
+#log {
+  position: absolute; right: 12px; top: calc(74px + env(safe-area-inset-top)); bottom: 12px;
+  width: min(380px, calc(100vw - 24px)); padding: 16px; overflow: auto; touch-action: pan-y;
+  background: rgba(12, 13, 32, .86); border: 1px solid var(--line); border-radius: 22px;
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+#log-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 17px; }
+#log-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+#log-list li { padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, .06); }
+#log-list li.future { opacity: .4; }
+#log-list .n { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+#log-list .t { margin-top: 2px; font-size: 17px; font-weight: 700; }
+#log-list .s, #log-list .q, #log-list .c { margin-top: 4px; font-size: 13px; line-height: 1.4; opacity: .82; }
+#log-list .q { font-style: italic; }
+
+/* заставка */
+#intro {
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center;
+  padding: 0 20px calc(7vh + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(4, 4, 12, .9), rgba(4, 4, 12, 0) 58%);
+  transition: opacity .7s;
+}
+/* после высадки заставка убирается совсем: иначе её прозрачные кнопки ловят касания
+   поверх джойстика и кнопки прыжка (на телефоне они стоят как раз там) */
+#intro.off { opacity: 0; visibility: hidden; transition: opacity .7s, visibility 0s .7s; }
+#intro.off, #intro.off * { pointer-events: none !important; }
+#intro-card { text-align: center; max-width: 560px; }
+.kicker { font-size: 14px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+#intro h1 { margin: 8px 0 10px; font-size: clamp(40px, 10vw, 88px); font-weight: 900; letter-spacing: -.02em; line-height: .98; }
+#intro p { margin: 0 auto 22px; font-size: clamp(15px, 2.4vw, 18px); line-height: 1.45; opacity: .86; }
+#intro #ios-install-tip { margin: 14px auto 0; max-width: 360px; font-size: 13px; }
+#intro-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+#play, #intro-follow {
+  padding: 15px 34px; border: 0; border-radius: 999px; background: var(--accent); color: #1b1203;
+  font-size: 18px; font-weight: 800; line-height: 1.25; box-shadow: 0 8px 30px rgba(255, 176, 74, .35);
+}
+/* та же кнопка, что «Высадиться», только в цвет Telegram */
+#intro-follow { background: var(--tg); color: #fff; text-decoration: none; box-shadow: 0 8px 30px rgba(42, 171, 238, .35); }
+#play:active, #intro-follow:active { transform: scale(.97); }
+
+/* режимы */
+body[data-mode="intro"] #top, body[data-mode="intro"] #bottom { opacity: 0; pointer-events: none; }
+body[data-mode="intro"] #top button, body[data-mode="intro"] #top a, body[data-mode="intro"] #bottom * { pointer-events: none; }
+body[data-mode="intro"] #joy, body[data-mode="intro"] #jump,
+body[data-mode="orbit"] #joy, body[data-mode="orbit"] #jump { display: none; }
+body[data-mode="orbit"] #hint { visibility: hidden; }
+
+/* узкий экран */
+@media (max-width: 520px) {
+  #btns { gap: 6px; }
+  #btns button { padding: 8px 11px; font-size: 13px; }
+  #btns a.follow { padding: 8px 11px; font-size: 13px; }
+  #btns button, #btns a.follow { white-space: nowrap; }
+  /* на телефоне «День заново» – под паспортом, чтобы не теснить кнопки справа */
+  #b-replay { display: block; margin: 6px 0 0; }
+  /* на телефоне кнопки заставки – одна под другой, одной ширины */
+  #intro-actions { flex-direction: column; align-items: stretch; width: min(100%, 340px); margin: 0 auto; gap: 10px; }
+  #play, #intro-follow { padding: 14px 18px; font-size: 16px; white-space: nowrap; }
+}
+
+#npc-dlg { bottom: calc(20px + env(safe-area-inset-bottom)); }
+#npc-opts { display: flex; flex-direction: column; gap: 6px; }
+#npc-opts button:hover, #npc-opts button:focus-visible {
+  background: rgba(42, 171, 238, .2); border-color: rgba(42, 171, 238, .55);
+}
+#npc-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+#npc-actions:not(:has(> button:not([hidden]))) { display: none; }
+#npc-actions button {
+  border: 0; border-radius: 999px; padding: 10px 19px;
+  color: #1b1203; background: var(--accent); font-size: 14px; font-weight: 800;
+}
+body.npc-talking :is(#bottom, #tip, #joy, #jump) { display: none !important; }
+body.talking #npc-actions { display: none; }
+
+#npc-actions #npc-climb { background: #f3e8d7; }
+#npc-dlg { max-height: calc(100% - 42px - env(safe-area-inset-top)); }
